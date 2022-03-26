@@ -29,34 +29,21 @@ function App() {
     setPagination(data);
   };
 
+  const components = [
+    { id: 1, name: "List Data Grid", branch: "components/list_data_grid" },
+  ];
+
   const columns = () => {
     return [
       {
         id: 0,
-        header: "Name",
+        header: "Component",
         value: (item) => item.name,
       },
       {
         id: 1,
-        header: "Email",
-        value: (item) => item.email,
-      },
-
-      {
-        id: 2,
-        header: "Address",
-        value: (item) => item.address.street,
-      },
-      {
-        id: 3,
-        header: "Phone",
-        value: (item) => item.phone,
-      },
-
-      {
-        id: 4,
-        header: "Website",
-        value: (item) => item.website,
+        header: "Branch",
+        value: (item) => item.branch,
       },
     ];
   };
@@ -73,14 +60,10 @@ function App() {
 
       <div className="w-full pt-10">
         <ListGrid
-          data={data}
-          defaultSelected={[3, 4]}
+          data={components}
           columns={columns()}
           color="#a78bfa"
-          pagination={pagination}
-          onPagination={onPagination}
-          total={100}
-          checboxVisible={true}
+          checboxVisible={false}
         />
       </div>
     </div>

@@ -135,21 +135,25 @@ export const ListGrid = ({
   defaultSelected,
 }) => {
   const [pages, setPages] = useState(
-    Array.from(
-      Array(Math.round(total / pagination.elementsByPage)),
-      (_, x) => x + 1
-    )
+    pagination
+      ? Array.from(
+          Array(Math.round(total / pagination.elementsByPage)),
+          (_, x) => x + 1
+        )
+      : null
   );
 
   const [selected, setSelected] = useState(defaultSelected);
 
   useEffect(() => {
-    setPages(
-      Array.from(
-        Array(Math.round(total / pagination.elementsByPage)),
-        (_, x) => x + 1
-      )
-    );
+    if (total) {
+      setPages(
+        Array.from(
+          Array(Math.round(total / pagination.elementsByPage)),
+          (_, x) => x + 1
+        )
+      );
+    }
   }, [total]);
 
   return (
