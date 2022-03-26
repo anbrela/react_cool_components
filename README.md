@@ -1,6 +1,6 @@
 # React cool components
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+Modern styled react tailwind reusable components. ¡Enjoy!
 
 ## Available Scripts
 
