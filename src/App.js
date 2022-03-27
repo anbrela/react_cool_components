@@ -35,28 +35,33 @@ function App() {
         id: 0,
         header: "Name",
         value: (item) => item.name,
+        sortable: true,
       },
       {
         id: 1,
         header: "Email",
         value: (item) => item.email,
+        sortable: false,
       },
 
       {
         id: 2,
         header: "Address",
         value: (item) => item.address.street,
+        sortable: true,
       },
       {
         id: 3,
         header: "Phone",
         value: (item) => item.phone,
+        sortable: false,
       },
 
       {
         id: 4,
         header: "Website",
         value: (item) => item.website,
+        sortable: true,
       },
     ];
   };
@@ -77,9 +82,17 @@ function App() {
           defaultSelected={[3, 4]}
           columns={columns()}
           color="#a78bfa"
+          messages={{
+            title: "My awesome list",
+            gridEmpty: "No data",
+            showing: "Showing",
+            from: "from",
+            elements: "Elements",
+          }}
+          onSort={(data) => console.log(data)}
           pagination={pagination}
           onPagination={onPagination}
-          total={100}
+          total={total}
           checboxVisible={true}
         />
       </div>

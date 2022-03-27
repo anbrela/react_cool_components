@@ -24,3 +24,14 @@ table th input[type="checkbox"]:checked{
   appearance:none;
   box-shadow: none;
 }
+
+
+
+
+.name_column svg {
+  display: none;
+}
+
+.name_column:hover svg {
+  display: block;
+}

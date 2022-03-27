@@ -1,11 +1,12 @@
 import React, { useEffect, useState } from "react";
-import { BsArrowLeft, BsArrowRight } from "react-icons/bs";
-import * as PropTypes from "prop-types";
+import { ListPagination } from "./listComponents/ListPagination";
+import { Select } from "../customComponents/Select";
+import { BsArrowUp } from "react-icons/bs";
 
 export const HeadElement = ({ item }) => {
   return (
     <th key={item.id} className="text-left p-4 bg-gray-100">
-      {item.header}
+      <p className={"flex items-center"}>{item.header} </p>
     </th>
   );
 };
@@ -40,96 +41,14 @@ export const BodyElement = ({
   );
 };
 
-function ListPagination(props) {
-  return (
-    <>
-      {props.pagination ? (
-        <div className="flex  mt-1 w-full bg-gray-100 h-10 px-5">
-          <div className="flex w-full h-full items-center justify-between">
-            <p className="text-xs">
-              Mostrando{" "}
-              <span className="font-bold">
-                {props.pagination.elementsByPage}
-              </span>{" "}
-              de <span className="font-bold">{props.total}</span>
-            </p>
-            <div className="flex space-x-2 items-center ">
-              <BsArrowLeft
-                className="cursor-pointer"
-                size={20}
-                onClick={() =>
-                  props.pagination.page > 1 ? props.previousPage() : null
-                }
-              />
-              <div className="flex space-x-2">
-                {props.pages?.map((el) => (
-                  <div
-                    onClick={() => props.onPagination(el)}
-                    key={el}
-                    className={`cursor-pointer flex items-center justify-center w-6 font-bold h-6 rounded-full ${
-                      props.pagination.page === el && "bg-white"
-                    }`}
-                  >
-                    {el}
-                  </div>
-                ))}
-              </div>
-              <BsArrowRight
-                className="cursor-pointer"
-                onClick={() =>
-                  props.pages.length > 1 &&
-                  props.pagination.page < props.pages.length
-                    ? props.nextPage()
-                    : null
-                }
-                size={20}
-              />
-            </div>
-            <div>
-              <p className="text-xs">
-                Por página:{" "}
-                <span className="font-bold">
-                  {" "}
-                  <select
-                    value={props.pagination.optionsByPage[0]}
-                    onChange={props.onChange}
-                    className="bg-gray-100"
-                  >
-                    {props.pagination.optionsByPage.map((el) => (
-                      <option className="text-xl" value={el} key={el}>
-                        {el}
-                      </option>
-                    ))}
-                  </select>{" "}
-                </span>
-              </p>
-            </div>
-          </div>
-        </div>
-      ) : null}
-    </>
-  );
-}
-
-ListPagination.propTypes = {
-  pagination: PropTypes.any,
-  elementsByPage: PropTypes.number,
-  total: PropTypes.any,
-  onClick: PropTypes.func,
-  pages: PropTypes.arrayOf(PropTypes.any),
-  callbackfn: PropTypes.func,
-  onClick1: PropTypes.func,
-  elementsByPage1: PropTypes.number,
-  onChange: PropTypes.func,
-  optionsByPage: PropTypes.any,
-  callbackfn1: PropTypes.func,
-};
 export const ListGrid = ({
   data,
   columns,
   pagination,
   color,
   total,
+  messages,
+  onSort,
   onPagination,
   checboxVisible,
   defaultSelected,
@@ -144,6 +63,10 @@ export const ListGrid = ({
   );
 
   const [selected, setSelected] = useState(defaultSelected);
+  const [sorts, setSorts] = useState({
+    name: null,
+    type: null,
+  });
 
   useEffect(() => {
     if (total) {
@@ -156,10 +79,46 @@ export const ListGrid = ({
     }
   }, [total]);
 
+  useEffect(() => {
+    onSort(sorts);
+  }, [sorts]);
+
   return (
     <div className="w-full flex justify-center ">
-      <div className="w-2/4 flex-col flex items-center">
-        <table className="w-full space-y-4 ">
+      <div className="w-full max-w-4xl flex-col flex items-center">
+        <div className="w-full flex justify-between py-4">
+          <span className="text-xl font-semibold">{messages.title}</span>
+          <div className="flex items-center">
+            <span>Order by: </span>
+            <Select
+              className="bg-gray-50 font-semibold ml-2"
+              value={sorts.name}
+              onChange={(e) => setSorts({ name: e.target.value, type: "ASC" })}
+              data={columns.map((el) => el)}
+            />
+
+            {sorts.name ? (
+              <div className="ml-4 flex items-center space-x-1">
+                <span>Order</span>
+                <span
+                  style={{ color: color }}
+                  onClick={() =>
+                    sorts.type === "ASC"
+                      ? setSorts({ ...sorts, type: "DESC" })
+                      : setSorts({ name: "" })
+                  }
+                >
+                  <BsArrowUp
+                    className={`cursor-pointer ${
+                      sorts.type === "DESC" && "rotate-180"
+                    }`}
+                  />
+                </span>
+              </div>
+            ) : null}
+          </div>
+        </div>
+        <table className="w-full space-y-4 relative">
           <thead>
             <tr>
               {checboxVisible ? (
@@ -182,6 +141,11 @@ export const ListGrid = ({
               ))}
             </tr>
           </thead>
+          {!data.length ? (
+            <div className="absolute w-full h-full flex justify-center">
+              {messages.gridEmpty}
+            </div>
+          ) : null}
           <tbody>
             {data.map((el) => (
               <BodyElement
@@ -200,7 +164,10 @@ export const ListGrid = ({
             ))}
           </tbody>
         </table>
+
         <ListPagination
+          classname={!data.length && "mt-14"}
+          messages={messages}
           pagination={pagination}
           elementsByPage={pagination?.elementsByPage}
           total={total}
