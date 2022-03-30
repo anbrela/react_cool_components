@@ -5,15 +5,13 @@ import React from "react";
 export const ListPagination = (props) => {
   return (
     <>
-      {props.pagination ? (
-        <div
-          className={`flex  mt-1 w-full bg-gray-100 h-14 px-5 ${props.classname}`}
-        >
+      {props?.pagination ? (
+        <div className={`flex  mt-1 w-full h-14 px-5 ${props.classname}`}>
           <div className="flex w-full h-full items-center justify-between">
             <p className="text-xs">
               {props.messages.showing}
               <span className="font-bold ml-1 mr-1">
-                {props.pagination.elementsByPage}
+                {props.pagination?.elementsByPage}
               </span>
               {props.messages.from}
               <span className="ml-1 font-bold">{props.total}</span>
@@ -23,7 +21,7 @@ export const ListPagination = (props) => {
                 className="cursor-pointer"
                 size={20}
                 onClick={() =>
-                  props.pagination.page > 1 ? props.previousPage() : null
+                  props.pagination?.page > 1 ? props.previousPage() : null
                 }
               />
               <div className="flex space-x-2">
@@ -32,7 +30,7 @@ export const ListPagination = (props) => {
                     onClick={() => props.onPagination(el)}
                     key={el}
                     className={`cursor-pointer flex items-center justify-center w-6 font-bold h-6 rounded-full ${
-                      props.pagination.page === el && "bg-white"
+                      props.pagination?.page === el && "bg-white"
                     }`}
                   >
                     {el}
@@ -43,7 +41,7 @@ export const ListPagination = (props) => {
                 className="cursor-pointer"
                 onClick={() =>
                   props.pages.length > 1 &&
-                  props.pagination.page < props.pages.length
+                  props.pagination?.page < props.pages.length
                     ? props.nextPage()
                     : null
                 }
@@ -55,11 +53,11 @@ export const ListPagination = (props) => {
                 {props.messages.elements}
                 <span className="font-bold">
                   <select
-                    value={props.pagination.optionsByPage[0]}
+                    value={props.pagination?.optionsByPage[0]}
                     onChange={props.onChange}
-                    className="bg-gray-100 cursor-pointer"
+                    className="bg-gray-50 cursor-pointer"
                   >
-                    {props.pagination.optionsByPage.map((el) => (
+                    {props.pagination?.optionsByPage.map((el) => (
                       <option className="text-xl" value={el} key={el}>
                         {el}
                       </option>

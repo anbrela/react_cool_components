@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import "./App.css";
-import { ListGrid } from "./components/ListGrid";
+import { ListGrid } from "./components/list_grid/ListGrid";
 
 function App() {
   const [data, setData] = useState([]);

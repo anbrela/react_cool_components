@@ -1,11 +1,13 @@
 import React, { useEffect, useState } from "react";
 import { ListPagination } from "./listComponents/ListPagination";
-import { Select } from "../customComponents/Select";
+import { Select } from "../../customComponents/Select";
 import { BsArrowUp } from "react-icons/bs";
+import PropTypes from "prop-types";
+import "./ListGrid.css";
 
 export const HeadElement = ({ item }) => {
   return (
-    <th key={item.id} className="text-left p-4 bg-gray-100">
+    <th key={item.id} className="text-left p-4">
       <p className={"flex items-center"}>{item.header} </p>
     </th>
   );
@@ -69,10 +71,10 @@ export const ListGrid = ({
   });
 
   useEffect(() => {
-    if (total) {
+    if (total && pagination) {
       setPages(
         Array.from(
-          Array(Math.round(total / pagination.elementsByPage)),
+          Array(Math.round(total / pagination?.elementsByPage)),
           (_, x) => x + 1
         )
       );
@@ -80,7 +82,9 @@ export const ListGrid = ({
   }, [total]);
 
   useEffect(() => {
-    onSort(sorts);
+    if (onSort) {
+      onSort(sorts);
+    }
   }, [sorts]);
 
   return (
@@ -97,7 +101,7 @@ export const ListGrid = ({
               data={columns.map((el) => el)}
             />
 
-            {sorts.name ? (
+            {sorts.name && onSort ? (
               <div className="ml-4 flex items-center space-x-1">
                 <span>Order</span>
                 <span
@@ -122,7 +126,7 @@ export const ListGrid = ({
           <thead>
             <tr>
               {checboxVisible ? (
-                <th className="w-5 bg-gray-100">
+                <th className="w-5">
                   <input
                     style={{ background: color }}
                     checked={selected.length === total}
@@ -174,17 +178,17 @@ export const ListGrid = ({
           onPagination={(el) => onPagination({ ...pagination, page: el })}
           previousPage={() =>
             onPagination({
-              page: pagination.page - 1,
-              elementsByPage: pagination.elementsByPage,
-              optionsByPage: pagination.optionsByPage,
+              page: pagination?.page - 1,
+              elementsByPage: pagination?.elementsByPage,
+              optionsByPage: pagination?.optionsByPage,
             })
           }
           pages={pages}
           nextPage={() =>
             onPagination({
-              page: pagination.page + 1,
-              elementsByPage: pagination.elementsByPage,
-              optionsByPage: pagination.optionsByPage,
+              page: pagination?.page + 1,
+              elementsByPage: pagination?.elementsByPage,
+              optionsByPage: pagination?.optionsByPage,
             })
           }
           onChange={(e) =>
@@ -197,4 +201,72 @@ export const ListGrid = ({
       </div>
     </div>
   );
+};
+
+ListGrid.propTypes = {
+  /**
+   * Array with all data to render.
+   */
+  data: PropTypes.array,
+  /**
+   * Columns objet with the params for each row.
+   */
+  columns: PropTypes.func,
+  /**
+   * Pagination object.
+   */
+  pagination: PropTypes.object,
+  /**
+   * Global color for table.
+   */
+  color: PropTypes.string,
+  /**
+   * Total number of elements.
+   */
+  total: PropTypes.number,
+  /**
+   * Messages for change table default texts.
+   */
+  messages: {
+    title: PropTypes.string,
+    gridEmpty: PropTypes.string,
+    showing: PropTypes.string,
+    from: PropTypes.string,
+    elements: PropTypes.string,
+  },
+  /**
+   * Callback function with sort data.
+   */
+  onSort: PropTypes.func,
+  /**
+   * Callback function with pagination data.
+   */
+  onPagination: PropTypes.func,
+  /**
+   * Select if checkbox shows to user.
+   */
+  checboxVisible: PropTypes.bool,
+  /**
+   * Default rows selected (item id)
+   */
+  defaultSelected: PropTypes.array,
+};
+
+ListGrid.defaultProps = {
+  data: [],
+  columns: [],
+  pagination: null,
+  color: "black",
+  total: 0,
+  messages: {
+    title: "My cool list",
+    gridEmpty: "No data",
+    showing: "Showing",
+    from: "from",
+    elements: "Elements",
+  },
+  onSort: null,
+  onPagination: null,
+  checboxVisible: false,
+  defaultSelected: [],
 };

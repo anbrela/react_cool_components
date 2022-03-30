@@ -1,0 +1,39 @@
+
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+
+
+body {
+   background: #f8fafc;
+}
+
+table {
+    border-collapse: separate;
+    border-spacing: 0 0.5em;
+
+}
+
+
+
+table td input[type="checkbox"]:checked,
+table th input[type="checkbox"]:checked{
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    -o-appearance: none;
+    appearance:none;
+    box-shadow: none;
+}
+
+
+
+
+.name_column svg {
+    display: none;
+}
+
+.name_column:hover svg {
+    display: block;
+}
